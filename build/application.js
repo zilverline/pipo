@@ -34067,11 +34067,14 @@ module.exports = App;
 
 var React = require("react");
 var ScoreComponent = require("./score");
+var NewGameComponent = require("./new_game");
 
 module.exports = React.createClass({displayName: 'exports',
   render: function () {
     return (
       React.DOM.div({className: "mod-board"}, 
+        NewGameComponent(null), 
+
         ScoreComponent({pos: "left", player: this.props.game.players.left}), 
         ScoreComponent({pos: "right", player: this.props.game.players.right})
       )
@@ -34079,7 +34082,29 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./score":193,"react":146}],193:[function(require,module,exports){
+},{"./new_game":193,"./score":194,"react":146}],193:[function(require,module,exports){
+
+/** @jsx React.DOM */
+
+var React = require("react");
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+    return (
+      React.DOM.div({className: "new"}, 
+        React.DOM.a({href: "#", className: "btn", onClick: this.handleNew}, "Start new game")
+      )
+    );
+  },
+
+  handleNew: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    App.socket.emit("new");
+  }
+});
+
+},{"react":146}],194:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = require("react");
@@ -34090,7 +34115,7 @@ module.exports = React.createClass({displayName: 'exports',
       React.DOM.div({className: "score"}, 
         this.props.player.score, 
         React.DOM.br(null), 
-        React.DOM.a({href: "#", onClick: this.handleScore}, 
+        React.DOM.a({href: "#", className: "btn", onClick: this.handleScore}, 
           "Score"
         )
       )
@@ -34104,8 +34129,8 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"react":146}],194:[function(require,module,exports){
+},{"react":146}],195:[function(require,module,exports){
 window.App = require("./application");
 window.App.initialize();
 
-},{"./application":191}]},{},[194]);
+},{"./application":191}]},{},[195]);

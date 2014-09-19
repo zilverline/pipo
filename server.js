@@ -12,14 +12,17 @@ var server = require("http").createServer(function (req, res) {
 
 var io = require("socket.io").listen(server);
 
-var game = require("./lib/game");
+var game = require("./lib/game")(io);
 
 io.on("connection", function (socket) {
-  socket.emit("game", game);
+  game.publish();
 
   socket.on("score", function(data) {
     game.score(data);
-    socket.emit("game", game);
+  });
+
+  socket.on("new", function() {
+    game.reset();
   });
 });
 
@@ -31,12 +34,10 @@ if (process.env.NODE_ENV == "production") {
   left.watch(function(err, signal) {
     if (err) return;
     game.score("left");
-    io.emit("game", game);
   });
 
   right.watch(function(err, signal) {
     if (err) return;
     game.score("right");
-    io.emit("game", game);
   });
 }

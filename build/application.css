@@ -79,25 +79,8 @@ body {
   color: #fff;
 }
 
-/* line 1, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
-.mod-board {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
-/* line 6, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
-.mod-board .score {
-  float: left;
-  width: 50%;
-  text-align: center;
-  position: relative;
-  top: 50%;
-  margin-top: -100px;
-  height: 200px;
-  font-size: 188px;
-}
-/* line 16, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
-.mod-board .score a {
+/* line 11, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/base/layout.sass */
+a.btn {
   display: inline-block;
   font-size: 14px;
   text-decoration: none;
@@ -106,6 +89,29 @@ body {
   color: #fff;
   font-weight: bold;
   border-radius: 5px;
+}
+
+/* line 1, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
+.mod-board {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  padding: 150px;
+}
+/* line 7, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
+.mod-board .new {
+  display: block;
+  text-align: center;
+  margin-bottom: 100px;
+}
+/* line 12, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
+.mod-board .score {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+  position: relative;
+  height: 200px;
+  font-size: 188px;
 }
 
 /*# sourceMappingURL=application.css.map */

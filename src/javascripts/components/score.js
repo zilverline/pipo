@@ -8,7 +8,7 @@ module.exports = React.createClass({
       <div className="score">
         {this.props.player.score}
         <br />
-        <a href="#" onClick={this.handleScore}>
+        <a href="#" className="btn" onClick={this.handleScore}>
           Score
         </a>
       </div>
