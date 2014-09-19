@@ -10,19 +10,33 @@ var server = require("http").createServer(function (req, res) {
   console.log("Started pipo on port 3000");
 });
 
-var io = require('socket.io').listen(server);
+var io = require("socket.io").listen(server);
 
-var game = {
-  players: [{
-    name: "Daniel",
-    score: 0
-  }, {
-    name: "Bart",
-    score: 1
-  }],
-  service: "Daniel",
-}
+var game = require("./lib/game");
 
 io.on("connection", function (socket) {
   socket.emit("game", game);
+
+  socket.on("score", function(data) {
+    game.score(data);
+    socket.emit("game", game);
+  });
 });
+
+if (process.env.NODE_ENV == "production") {
+  var Gpio = require("onoff").Gpio;
+  var left = new Gpio(17, "in", "rising");
+  var right = new Gpio(18, "in", "rising");
+
+  left.watch(function(err, signal) {
+    if (err) return;
+    game.score("left");
+    io.emit("game", game);
+  });
+
+  right.watch(function(err, signal) {
+    if (err) return;
+    game.score("right");
+    io.emit("game", game);
+  });
+}

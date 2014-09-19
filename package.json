@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "mime": "^1.2.11",
+    "node-keyboard": "git+https://github.com/Bornholm/node-keyboard.git",
     "node-static": "^0.7.5",
+    "onoff": "^0.3.2",
     "socket.io": "^1.1.0"
   },
   "devDependencies": {

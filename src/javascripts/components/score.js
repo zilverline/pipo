@@ -6,8 +6,18 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div className="score">
-        {this.props.score}
+        {this.props.player.score}
+        <br />
+        <a href="#" onClick={this.handleScore}>
+          Score
+        </a>
       </div>
     );
+  },
+
+  handleScore: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    App.socket.emit("score", this.props.pos);
   }
 });

@@ -34072,14 +34072,9 @@ module.exports = React.createClass({displayName: 'exports',
   render: function () {
     return (
       React.DOM.div({className: "mod-board"}, 
-        this.props.game.players.map(this.renderScore)
+        ScoreComponent({pos: "left", player: this.props.game.players.left}), 
+        ScoreComponent({pos: "right", player: this.props.game.players.right})
       )
-    );
-  },
-
-  renderScore: function(player) {
-    return (
-      ScoreComponent({key: player.name, score: player.score})
     );
   }
 });
@@ -34093,9 +34088,19 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
       React.DOM.div({className: "score"}, 
-        this.props.score
+        this.props.player.score, 
+        React.DOM.br(null), 
+        React.DOM.a({href: "#", onClick: this.handleScore}, 
+          "Score"
+        )
       )
     );
+  },
+
+  handleScore: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    App.socket.emit("score", this.props.pos);
   }
 });
 

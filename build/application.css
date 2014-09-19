@@ -79,13 +79,13 @@ body {
   color: #fff;
 }
 
-/* line 1, ../src/stylesheets/modules/board.sass */
+/* line 1, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
 .mod-board {
   position: absolute;
   height: 100%;
   width: 100%;
 }
-/* line 6, ../src/stylesheets/modules/board.sass */
+/* line 6, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
 .mod-board .score {
   float: left;
   width: 50%;
@@ -95,6 +95,17 @@ body {
   margin-top: -100px;
   height: 200px;
   font-size: 188px;
+}
+/* line 16, /Users/daniel/Development/Workspaces/code/pipo/src/stylesheets/modules/board.sass */
+.mod-board .score a {
+  display: inline-block;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 10px 15px;
+  background: #d25301;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 /*# sourceMappingURL=application.css.map */

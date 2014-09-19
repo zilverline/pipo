@@ -7,14 +7,9 @@ module.exports = React.createClass({
   render: function () {
     return (
       <div className="mod-board">
-        {this.props.game.players.map(this.renderScore)}
+        <ScoreComponent pos="left" player={this.props.game.players.left} />
+        <ScoreComponent pos="right" player={this.props.game.players.right} />
       </div>
-    );
-  },
-
-  renderScore: function(player) {
-    return (
-      <ScoreComponent key={player.name} score={player.score} />
     );
   }
 });
