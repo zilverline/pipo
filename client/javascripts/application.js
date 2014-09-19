@@ -1,3 +1,4 @@
+var $ = require("jquery");
 var React = require("react");
 var connectSocket = require("socket.io-client");
 var AppComponent = require("./components/app");
@@ -5,11 +6,18 @@ var AppComponent = require("./components/app");
 var App = {
   initialize: function() {
     this.socket = connectSocket(document.location.origin);
-    this.mainComponent = React.renderComponent(AppComponent(), document.getElementById("app"));
-    this.socket.on('news', function (data) {
-      console.log(data);
-      this.socket.emit('my other event', { my: 'data' });
+
+    this.socket.on('game', function (data) {
+      this.renderGame(data);
     }.bind(this));
+  },
+
+  renderGame: function(game) {
+    if (!this.mainComponent) {
+      this.mainComponent = React.renderComponent(AppComponent({game: game}), document.getElementById("app"));
+    } else {
+      this.mainComponent.setProps({game: game});
+    }
   }
 }
 

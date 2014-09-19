@@ -1,29 +1,31 @@
 var express = require('express');
+var debug = require('debug')('pipo');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 var browserify = require('browserify-middleware');
-var routes = require('./routes/index');
 
 var app = express();
 
 app.get('/javascripts/main.js', browserify('./client/javascripts/main.js', { transform: ["reactify"] }));
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.set('port', process.env.PORT || 3000);
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(require('node-compass')({
-  mode: 'expanded',
-  sass: "../client/stylesheets"
-}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('node-compass')({
+  sass: "../client/stylesheets",
+  logging: true
+}));
 
-app.use('/', routes);
+var game = {
+  players: [{
+    name: "Daniel",
+    score: 0
+  }, {
+    name: "Bart",
+    score: 1
+  }],
+  service: "Daniel",
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -32,27 +34,19 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500).json({
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500).json({
     message: err.message,
-    error: {}
+    error: err
   });
 });
 
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
 
-module.exports = app;
+var io = require('socket.io').listen(server);
+
+io.on('connection', function (socket) {
+  socket.emit('game', game);
+});
