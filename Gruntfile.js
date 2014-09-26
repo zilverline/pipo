@@ -105,6 +105,14 @@ module.exports = function(grunt) {
           'dist/application-<%= now %>.min.css': 'build/application.min.css'
         }]
       }
+    },
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['test/**/*.js']
+      }
     }
   });
 
@@ -116,7 +124,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
+  grunt.registerTask('test', 'mochaTest');
   grunt.registerTask('default', ['sass', 'browserify:dev', 'string-replace:dev', 'copy:dev']);
-  grunt.registerTask('prod', ['default', 'clean:dist', 'string-replace:dist', 'cssmin', 'uglify', 'copy:dist']);
+  grunt.registerTask('prod', ['default', 'test', 'clean:dist', 'string-replace:dist', 'cssmin', 'uglify', 'copy:dist']);
 };
