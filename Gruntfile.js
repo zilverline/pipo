@@ -40,10 +40,16 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['src/**/*', 'Gruntfile.js'],
-      tasks: ['default'],
       options: {
         atBegin: true
+      },
+      dev: {
+        files: ['src/**/*', 'Gruntfile.js'],
+        tasks: ['default']
+      },
+      test: {
+        files: ['src/**/*.js', 'test/**/*.js'],
+        tasks: ['test']
       }
     },
     clean: {
