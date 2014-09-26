@@ -14,18 +14,36 @@ var io = require("socket.io").listen(server);
 var ScoreButton = require("./lib/score_button");
 var game = require("./lib/game")(io);
 var buttons = {
-  left: new ScoreButton(17, "left", game),
-  right: new ScoreButton(18, "right", game)
+  left: ScoreButton.create({ button: 17, led: 18 }),
+  right: ScoreButton.create({ button: 22, led: 23 })
 }
+
+var onscore = function(side) {
+  return function(err) {
+    if (err) return;
+    game.score(side);
+  }
+};
+
+buttons['left'].bind(onscore('left'));
+buttons['right'].bind(onscore('right'));
 
 io.on("connection", function (socket) {
   game.publish();
 
   socket.on("score", function(data) {
-    buttons[data].press();
+    onscore(data)();
   });
 
   socket.on("new", function() {
     game.reset();
   });
 });
+
+var exit = function() {
+  buttons['left'].unbind();
+  buttons['right'].unbind();
+  process.exit();
+};
+
+process.on('SIGINT', exit);
