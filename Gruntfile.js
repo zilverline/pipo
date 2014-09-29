@@ -115,9 +115,19 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          reporter: 'dot'
+          reporter: 'dot',
+          colors: false
         },
         src: ['test/**/*.js']
+      }
+    },
+    mocha_istanbul: {
+      coverage: {
+        src: 'test',
+        options: {
+          mask: '*_test.js',
+          noColors: true
+        }
       }
     }
   });
@@ -131,6 +141,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-mocha-istanbul');
 
   grunt.registerTask('test', 'mochaTest');
   grunt.registerTask('default', ['sass', 'browserify:dev', 'string-replace:dev', 'copy:dev']);

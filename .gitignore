@@ -3,3 +3,5 @@ node_modules
 public/javascripts
 public/stylesheets
 build
+coverage
+.DS_Store
