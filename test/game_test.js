@@ -1,4 +1,5 @@
 var expect = require("chai").expect;
+var sinon = require('sinon');
 var Game = require("./../lib/game");
 
 describe("Game", function() {
@@ -62,6 +63,10 @@ describe("Game", function() {
   });
 
   describe("game status", function() {
+    var clock;
+    beforeEach(function() { clock = sinon.useFakeTimers() });
+    afterEach(function() { clock.restore() });
+
     it ("starts in idle", function() {
       expect(game.currentState().status).to.equal("idle");
     });
@@ -74,6 +79,14 @@ describe("Game", function() {
       game.status = "idle";
       game.score("right");
       expect(game.currentState().status).to.equal("service");
+    });
+
+    it ("resets finished game after 60s", function() {
+        game.status = "playing";
+        game.players["left"].score = 20;
+        game.score("left");
+        clock.tick(60100);
+        expect(game.currentState().status).to.equal("idle");
     });
   });
 
