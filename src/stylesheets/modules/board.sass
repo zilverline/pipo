@@ -13,16 +13,17 @@
     font-size: 36px
     text-transform: uppercase
     background-color: $orange
+    +transition(left 0.3s ease)
 
     &.left,
     &.right
       width: 50%
 
     &.left
-      left: 0
+      left: 0%
 
     &.right
-      right: 0
+      left: 50%
       border-left: 2px solid $white
 
   .player
