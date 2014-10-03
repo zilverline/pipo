@@ -80,12 +80,12 @@ describe("Game", function() {
 
   describe("finished game", function() {
     var clock;
-    var winner = "right";
     beforeEach(function() {
       clock = sinon.useFakeTimers();
-      game.status = "playing";
-      game.players[winner].score = 20;
-      game.score(winner);
+      game.status = "service"
+      game.score("left");
+      game.players["left"].score = 20;
+      game.score("left");
     });
     afterEach(function() { clock.restore() });
 
@@ -95,10 +95,11 @@ describe("Game", function() {
     });
 
     it ("starts a rematch on score", function() {
+      game.started = "right";
       game.score();
       clock.tick(60100);
       expect(game.currentState().status).to.equal("playing");
-      expect(game.currentState().service).to.equal(winner);
+      expect(game.currentState().service).to.equal("left");
     });
   });
 
