@@ -1,20 +1,45 @@
 .mod-board
-  position: absolute
   height: 100%
-  width: 100%
-  padding: 150px
+  display: flex
+  flex-direction: row
 
-  .new
-    display: block
+  .serving
+    position: absolute
+    height: 100px
+    width: 100%
+    top: 0
+    line-height: 100px
     text-align: center
-    margin-bottom: 100px
+    font-size: 36px
+    text-transform: uppercase
+    background-color: $orange
 
-  .score
-    display: inline-block
-    width: 50%
-    text-align: center
-    position: relative
-    height: 200px
-    font-size: 188px
+    &.left,
+    &.right
+      width: 50%
 
+    &.left
+      left: 0
 
+    &.right
+      right: 0
+      border-left: 2px solid $white
+
+  .player
+    display: flex
+    height: 100%
+    max-width: 50%
+    flex-grow: 1
+    justify-content: center
+
+    &.left
+      background-color: $light_blue
+
+    &.right
+      background-color: $blue
+      border-left: 2px solid $white
+
+    h1
+      align-self: center
+      font-size: 204px
+      text-shadow: 0px 2px 4px $gray

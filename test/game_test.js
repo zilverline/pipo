@@ -61,13 +61,29 @@ describe("Game", function() {
     });
   });
 
+  describe("game status", function() {
+    it ("starts in idle", function() {
+      expect(game.currentState().status).to.equal("idle");
+    });
+
+    it ("starts game in serving when any button pressed", function() {
+      game.status = "idle";
+      game.score("left");
+      expect(game.currentState().status).to.equal("service");
+
+      game.status = "idle";
+      game.score("right");
+      expect(game.currentState().status).to.equal("service");
+    });
+  });
+
   describe("serving", function() {
     it ("starts without anyone serving", function() {
       expect(game.currentState().service).to.be.null;
-      expect(game.currentState().status).to.equal("service");
     });
 
     it ("sets the server when the first person scores, does not increase score", function() {
+      game.status = "service";
       game.score("left");
       expect(game.currentState().service).to.equal("left");
       expect(game.currentState().status).to.equal("playing");
@@ -77,6 +93,7 @@ describe("Game", function() {
     });
 
     it ("switches service to the other player after 5 serves", function() {
+      game.status = "playing";
       game.service = "left";
       game.players["left"].score = 4;
 
@@ -86,6 +103,7 @@ describe("Game", function() {
     });
 
     it ("switches service to the other player every turn when it's 20-20", function() {
+      game.status = "playing";
       game.service = "left";
       game.players["left"].score = 20;
       game.players["right"].score = 19;

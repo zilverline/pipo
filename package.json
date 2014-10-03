@@ -27,6 +27,7 @@
     "mocha": "^1.21.4",
     "nodemon": "^1.2.1",
     "react": "^0.11.2",
+    "react-tap-event-plugin": "^0.1.1",
     "reactify": "^0.14.0",
     "socket.io-client": "^1.1.0",
     "watchify": "^1.0.2"

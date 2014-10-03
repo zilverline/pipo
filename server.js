@@ -32,11 +32,11 @@ io.on("connection", function (socket) {
   game.publish();
 
   socket.on("score", function(data) {
-    onscore(data)();
+    game.score(data);
   });
 
-  socket.on("new", function() {
-    game.reset();
+  socket.on("start", function() {
+    game.score();
   });
 });
 

@@ -1,18 +1,15 @@
 /** @jsx React.DOM */
 
 var React = require("react");
-var ScoreComponent = require("./score");
-var NewGameComponent = require("./new_game");
+var StartGameComponent = require("./start_game");
+var ScoreBoard = require("./score_board");
 
 module.exports = React.createClass({
   render: function () {
-    return (
-      <div className="mod-board">
-        <NewGameComponent />
-
-        <ScoreComponent pos="left" player={this.props.game.players.left} />
-        <ScoreComponent pos="right" player={this.props.game.players.right} />
-      </div>
-    );
+    if (this.props.game.status === "idle") {
+      return <StartGameComponent />
+    } else {
+      return <ScoreBoard game={this.props.game} />
+    }
   }
 });

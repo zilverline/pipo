@@ -18,6 +18,14 @@ var App = {
     } else {
       this.mainComponent.setProps({game: game});
     }
+  },
+
+  startGame: function() {
+    this.socket.emit("start");
+  },
+
+  score: function(id) {
+    this.socket.emit("score", id);
   }
 }
 
