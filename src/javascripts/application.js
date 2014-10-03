@@ -26,6 +26,10 @@ var App = {
 
   score: function(id) {
     this.socket.emit("score", id);
+  },
+
+  resetGame: function() {
+    this.socket.emit("reset");
   }
 }
 

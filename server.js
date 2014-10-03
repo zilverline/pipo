@@ -38,6 +38,10 @@ io.on("connection", function (socket) {
   socket.on("start", function() {
     game.score();
   });
+
+  socket.on("reset", function() {
+    game.reset();
+  });
 });
 
 var exit = function() {

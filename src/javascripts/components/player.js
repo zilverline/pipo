@@ -11,7 +11,10 @@ module.exports = React.createClass({
     );
   },
 
-  handleScore: function() {
+  handleScore: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
     App.score(this.props.key);
   }
 });

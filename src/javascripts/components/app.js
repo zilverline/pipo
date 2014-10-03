@@ -8,7 +8,7 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 module.exports = React.createClass({
   render: function () {
     return (
-      <ReactCSSTransitionGroup transitionName="page">
+      <ReactCSSTransitionGroup transitionName="page" transitionEnter={false} transitionLeave={false}>
         {this.renderGameState()}
       </ReactCSSTransitionGroup>
     );

@@ -10,6 +10,11 @@ module.exports = React.createClass({
         <div className={"serving " + this.props.game.service}>{this.renderServiceText()}</div>
         <PlayerComponent key={"left"} player={this.props.game.players["left"]} />
         <PlayerComponent key={"right"} player={this.props.game.players["right"]} />
+        <div className="controls">
+          <a href="#" onTouchTap={this.handleReset}>
+            <i className="fa fa-sign-out" />
+          </a>
+        </div>
       </div>
     );
   },
@@ -20,5 +25,11 @@ module.exports = React.createClass({
     } else {
       return "Serving";
     }
+  },
+
+  handleReset: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    App.resetGame();
   }
 });
