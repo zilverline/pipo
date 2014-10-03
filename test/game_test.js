@@ -63,10 +63,6 @@ describe("Game", function() {
   });
 
   describe("game status", function() {
-    var clock;
-    beforeEach(function() { clock = sinon.useFakeTimers() });
-    afterEach(function() { clock.restore() });
-
     it ("starts in idle", function() {
       expect(game.currentState().status).to.equal("idle");
     });
@@ -80,13 +76,29 @@ describe("Game", function() {
       game.score("right");
       expect(game.currentState().status).to.equal("service");
     });
+  });
 
-    it ("resets finished game after 60s", function() {
-        game.status = "playing";
-        game.players["left"].score = 20;
-        game.score("left");
-        clock.tick(60100);
-        expect(game.currentState().status).to.equal("idle");
+  describe("finished game", function() {
+    var clock;
+    var winner = "right";
+    beforeEach(function() {
+      clock = sinon.useFakeTimers();
+      game.status = "playing";
+      game.players[winner].score = 20;
+      game.score(winner);
+    });
+    afterEach(function() { clock.restore() });
+
+    it ("resets game after 60s", function() {
+      clock.tick(60100);
+      expect(game.currentState().status).to.equal("idle");
+    });
+
+    it ("starts a rematch on score", function() {
+      game.score();
+      clock.tick(60100);
+      expect(game.currentState().status).to.equal("playing");
+      expect(game.currentState().service).to.equal(winner);
     });
   });
 
