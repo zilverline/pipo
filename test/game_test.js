@@ -39,6 +39,7 @@ describe("Game", function() {
       game.players["right"].score = 20;
       game.score("right");
       expect(game.currentState().status).to.equal("finished");
+      expect(game.currentState().winner).to.equal("right");
     });
 
     it ("does not finish the game when there is less than 2 point difference", function() {
@@ -59,6 +60,7 @@ describe("Game", function() {
       game.score("left");
       game.score("left");
       expect(game.currentState().status).to.equal("finished");
+      expect(game.currentState().winner).to.equal("left");
     });
   });
 
