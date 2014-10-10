@@ -14,6 +14,9 @@ describe("Game", function() {
     onTransition: function(newStatus, state) {
       this.status = newStatus;
       this.gameState = state;
+    },
+    onSwitchService: function(player) {
+      this.service = player;
     }
   };
   var game = Game(view);
@@ -129,7 +132,7 @@ describe("Game", function() {
     it ("sets the server when the first person scores, does not increase score", function() {
       game.status = "service";
       game.round("left");
-      expect(view.gameState.service).to.equal("left");
+      expect(view.service).to.equal("left");
       expect(view.gameState.status).to.equal("playing");
 
       expect(view.gameState.players["left"].score).to.equal(0);
@@ -142,9 +145,9 @@ describe("Game", function() {
       game.players["left"].score = 4;
       game.publish();
 
-      expect(view.gameState.service).to.equal("left");
+      expect(view.service).to.equal("left");
       game.round("left");
-      expect(view.gameState.service).to.equal("right");
+      expect(view.service).to.equal("right");
     });
 
     it ("switches service to the other player every turn when it's 20-20", function() {
@@ -154,13 +157,13 @@ describe("Game", function() {
       game.players["right"].score = 19;
 
       game.round("right");
-      expect(view.gameState.service).to.equal("right");
+      expect(view.service).to.equal("right");
 
       game.round("right");
-      expect(view.gameState.service).to.equal("left");
+      expect(view.service).to.equal("left");
 
       game.round("left");
-      expect(view.gameState.service).to.equal("right");
+      expect(view.service).to.equal("right");
     });
   });
 });

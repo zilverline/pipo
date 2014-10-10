@@ -74,4 +74,11 @@ describe("View", function() {
       expect(socket.events).to.contain({"game": gameState});
     });
   });
+
+  describe("onSwitchService", function() {
+    it ("emits service event", function() {
+      view.onSwitchService("left");
+      expect(socket.events).to.contain({"service": "left"});
+    });
+  });
 });
