@@ -151,7 +151,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    audiosprite : {
+    audiosprite: {
       all : {
         cwd: "build/",
         output: "sounds",
@@ -177,4 +177,23 @@ module.exports = function(grunt) {
   grunt.registerTask('test', 'mochaTest');
   grunt.registerTask('default', ['sass', 'audiosprite', 'browserify:dev', 'string-replace:dev', 'copy:dev']);
   grunt.registerTask('prod', ['default', 'test', 'clean:dist', 'string-replace:dist', 'cssmin', 'uglify', 'copy:dist']);
+
+  grunt.registerTask('refresh-sounds', function() {
+    var shell = require("child_process").exec;
+    var tts = function(query, filename) {
+      if (!filename) {
+        filename = query;
+      }
+
+      shell("curl -A \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36\" \"http://translate.google.com/translate_tts?tl=en_US&q=" + encodeURIComponent(query) + "\" -o ./src/sounds/" + filename + ".mp3");
+    }
+
+    for (var i = 0; i <= 40; i++) {
+      tts(i);
+    }
+
+    tts("Switching service", "switching-service");
+    tts("Gamepoint", "gamepoint");
+    tts("Game over", "game-over");
+  });
 };
