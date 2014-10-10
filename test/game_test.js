@@ -110,6 +110,10 @@ describe("Game", function() {
     });
     afterEach(function() { clock.restore() });
 
+    it ("has a 'rematch' status", function() {
+      expect(view.status).to.equal("finished");
+    });
+
     it ("resets game after 60s", function() {
       clock.tick(60100);
       expect(view.gameState.status).to.equal("idle");
