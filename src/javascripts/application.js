@@ -55,7 +55,7 @@ var App = {
   },
 
   playServiceSound: function() {
-    this.sound.add("switch-service").play();
+    this.sound.add("switching-service").play();
   },
 
   startGame: function() {
