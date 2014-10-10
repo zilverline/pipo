@@ -14,9 +14,9 @@ describe("View", function() {
     events: []
   };
   var Led = {
-    blink: function(times, speed) {
+    blink: function(n, unit) {
       var event = {};
-      event[speed] = times;
+      event[unit] = n;
       this.blinks.push(event);
     },
     restore: function() {
@@ -62,7 +62,7 @@ describe("View", function() {
 
     it ("blinks led", function() {
       view.onScore("left", "left scored");
-      expect(leds['left'].blinks).to.contain({'fast': 3});
+      expect(leds['left'].blinks).to.contain({'times': 3});
       expect(leds['right'].blinks).to.be.empty;
     });
   });
