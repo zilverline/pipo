@@ -68,12 +68,6 @@ describe("View", function() {
   });
 
   describe("onTransition", function() {
-    it ("emits new status", function() {
-      var gameState = "service won by left";
-      view.onTransition("service", gameState);
-      expect(socket.events).to.contain({"service": gameState});
-    });
-
     it ("emits game state", function() {
       var gameState = "service won by right";
       view.onTransition("service", gameState);
