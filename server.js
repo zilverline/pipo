@@ -21,8 +21,23 @@ var server = require("http").createServer(function (req, res) {
 });
 
 var io = require("socket.io").listen(server);
+var view = {
+  emit: function(data) {
+    io.emit("game", data);
+  },
+
+  onScore: function(player, newState) {
+    io.emit('score', newState);
+    this.emit(newState);
+  },
+
+  onTransition: function(newStatus, newState) {
+    io.emit(newStatus, newState);
+    this.emit(newState);
+  }
+};
 var ScoreButton = require("./lib/score_button");
-var game = require("./lib/game")(io);
+var game = require("./lib/game")(view);
 var buttons = {
   left: ScoreButton.create({ button: 17, led: 18 }),
   right: ScoreButton.create({ button: 22, led: 23 })
@@ -31,7 +46,7 @@ var buttons = {
 var onscore = function(side) {
   return function(err) {
     if (err) return;
-    game.score(side);
+    game.round(side);
   }
 };
 
@@ -42,11 +57,11 @@ io.on("connection", function (socket) {
   game.publish();
 
   socket.on("score", function(data) {
-    game.score(data);
+    game.round(data);
   });
 
   socket.on("start", function() {
-    game.score();
+    game.round();
   });
 
   socket.on("reset", function() {

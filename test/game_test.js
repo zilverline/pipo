@@ -3,9 +3,24 @@ var sinon = require('sinon');
 var Game = require("./../lib/game");
 
 describe("Game", function() {
-  var events = { emit: function() {} };
-  var game = Game(events);
+  var view = {
+    emit: function(data) {
+      this.gameState = data;
+    },
+    onScore: function(player, state) {
+      this.lastScored = player;
+      this.gameState = state;
+    },
+    onTransition: function(newStatus, state) {
+      this.status = newStatus;
+      this.gameState = state;
+    }
+  };
+  var game = Game(view);
 
+  beforeEach(function() {
+    game.publish();
+  });
   afterEach(function() {
     game.reset();
   });
@@ -17,66 +32,67 @@ describe("Game", function() {
     });
 
     it ("starts with empty scores", function() {
-      expect(game.currentState().players["left"].score).to.equal(0);
-      expect(game.currentState().players["right"].score).to.equal(0);
+      expect(view.gameState.players["left"].score).to.equal(0);
+      expect(view.gameState.players["right"].score).to.equal(0);
     });
 
     it ("increases score as player scores", function() {
-      game.score("left");
-      expect(game.currentState().players["left"].score).to.equal(1);
-      expect(game.currentState().players["right"].score).to.equal(0);
+      game.round("left");
+      expect(view.lastScored).to.equal("left");
+      expect(view.gameState.players["left"].score).to.equal(1);
+      expect(view.gameState.players["right"].score).to.equal(0);
     });
 
     it ("finishes the game when the first player reaches 21", function() {
       game.players["left"].score = 20;
-      game.score("left");
-      expect(game.currentState().status).to.equal("finished");
+      game.round("left");
+      expect(view.gameState.status).to.equal("finished");
 
       game.reset();
       game.service = "left";
       game.status = "playing";
 
       game.players["right"].score = 20;
-      game.score("right");
-      expect(game.currentState().status).to.equal("finished");
-      expect(game.currentState().winner).to.equal("right");
+      game.round("right");
+      expect(view.gameState.status).to.equal("finished");
+      expect(view.gameState.winner).to.equal("right");
     });
 
     it ("does not finish the game when there is less than 2 point difference", function() {
       game.players["right"].score = 20;
       game.players["left"].score = 20;
-      game.score("left");
+      game.round("left");
 
-      expect(game.currentState().players["left"].score).to.equal(21);
-      expect(game.currentState().players["right"].score).to.equal(20);
-      expect(game.currentState().status).to.equal("playing");
+      expect(view.gameState.players["left"].score).to.equal(21);
+      expect(view.gameState.players["right"].score).to.equal(20);
+      expect(view.gameState.status).to.equal("playing");
 
-      game.score("right");
+      game.round("right");
 
-      expect(game.currentState().players["left"].score).to.equal(21);
-      expect(game.currentState().players["right"].score).to.equal(21);
-      expect(game.currentState().status).to.equal("playing");
+      expect(view.gameState.players["left"].score).to.equal(21);
+      expect(view.gameState.players["right"].score).to.equal(21);
+      expect(view.gameState.status).to.equal("playing");
 
-      game.score("left");
-      game.score("left");
-      expect(game.currentState().status).to.equal("finished");
-      expect(game.currentState().winner).to.equal("left");
+      game.round("left");
+      game.round("left");
+      expect(view.gameState.status).to.equal("finished");
+      expect(view.gameState.winner).to.equal("left");
     });
   });
 
   describe("game status", function() {
     it ("starts in idle", function() {
-      expect(game.currentState().status).to.equal("idle");
+      expect(view.gameState.status).to.equal("idle");
     });
 
     it ("starts game in serving when any button pressed", function() {
       game.status = "idle";
-      game.score("left");
-      expect(game.currentState().status).to.equal("service");
+      game.round("left");
+      expect(view.gameState.status).to.equal("service");
 
       game.status = "idle";
-      game.score("right");
-      expect(game.currentState().status).to.equal("service");
+      game.round("right");
+      expect(view.gameState.status).to.equal("service");
     });
   });
 
@@ -85,49 +101,50 @@ describe("Game", function() {
     beforeEach(function() {
       clock = sinon.useFakeTimers();
       game.status = "service"
-      game.score("left");
+      game.round("left");
       game.players["left"].score = 20;
-      game.score("left");
+      game.round("left");
     });
     afterEach(function() { clock.restore() });
 
     it ("resets game after 60s", function() {
       clock.tick(60100);
-      expect(game.currentState().status).to.equal("idle");
+      expect(view.gameState.status).to.equal("idle");
     });
 
     it ("starts a rematch on score", function() {
       game.started = "right";
-      game.score();
+      game.round();
       clock.tick(60100);
-      expect(game.currentState().status).to.equal("playing");
-      expect(game.currentState().service).to.equal("left");
+      expect(view.gameState.status).to.equal("playing");
+      expect(view.gameState.service).to.equal("left");
     });
   });
 
   describe("serving", function() {
     it ("starts without anyone serving", function() {
-      expect(game.currentState().service).to.be.null;
+      expect(view.gameState.service).to.be.null;
     });
 
     it ("sets the server when the first person scores, does not increase score", function() {
       game.status = "service";
-      game.score("left");
-      expect(game.currentState().service).to.equal("left");
-      expect(game.currentState().status).to.equal("playing");
+      game.round("left");
+      expect(view.gameState.service).to.equal("left");
+      expect(view.gameState.status).to.equal("playing");
 
-      expect(game.currentState().players["left"].score).to.equal(0);
-      expect(game.currentState().players["right"].score).to.equal(0);
+      expect(view.gameState.players["left"].score).to.equal(0);
+      expect(view.gameState.players["right"].score).to.equal(0);
     });
 
     it ("switches service to the other player after 5 serves", function() {
       game.status = "playing";
       game.service = "left";
       game.players["left"].score = 4;
+      game.publish();
 
-      expect(game.currentState().service).to.equal("left");
-      game.score("left");
-      expect(game.currentState().service).to.equal("right");
+      expect(view.gameState.service).to.equal("left");
+      game.round("left");
+      expect(view.gameState.service).to.equal("right");
     });
 
     it ("switches service to the other player every turn when it's 20-20", function() {
@@ -136,14 +153,14 @@ describe("Game", function() {
       game.players["left"].score = 20;
       game.players["right"].score = 19;
 
-      game.score("right");
-      expect(game.currentState().service).to.equal("right");
+      game.round("right");
+      expect(view.gameState.service).to.equal("right");
 
-      game.score("right");
-      expect(game.currentState().service).to.equal("left");
+      game.round("right");
+      expect(view.gameState.service).to.equal("left");
 
-      game.score("left");
-      expect(game.currentState().service).to.equal("right");
+      game.round("left");
+      expect(view.gameState.service).to.equal("right");
     });
   });
 });
