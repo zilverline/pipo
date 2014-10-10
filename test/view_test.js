@@ -72,6 +72,19 @@ describe("View", function() {
       var gameState = "service won by right";
       view.onTransition("service", gameState);
       expect(socket.events).to.contain({"game": gameState});
+      expect(leds['left'].blinks).to.be.empty;
+      expect(leds['right'].blinks).to.be.empty;
+    });
+
+    it ("blinks both leds on finish", function() {
+      view.onTransition("finished", { gameOverTimeout: 60000 });
+      expect(leds['left'].blinks).to.contain({'seconds': 60});
+      expect(leds['right'].blinks).to.contain({'seconds': 60});
+    });
+  });
+
+  describe("onSwitchService", function() {
+    it ("emits service event", function() {
     });
   });
 
