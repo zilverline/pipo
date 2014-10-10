@@ -195,5 +195,6 @@ module.exports = function(grunt) {
     tts("Switching service", "switching-service");
     tts("Gamepoint", "gamepoint");
     tts("Game over", "game-over");
+    tts("Sound enabled", "sound-enabled");
   });
 };

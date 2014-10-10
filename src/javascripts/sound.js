@@ -17,16 +17,18 @@ var convertSprite = function(rawSprite) {
   return audiosprite;
 }
 
-var Sound = function() {
-  this._paused = true;
+var Sound = function(onload) {
+  this._playing = false;
   this._playlist = [];
 
   this.howl = new Howl(convertSprite(require("../../build/sounds.json")));
+
+  this.howl.on("load", onload);
   this.howl.on("end", function() {
     if (this._playlist.length > 0) {
       this.howl.play(this.next());
     } else {
-      this._paused = true;
+      this._playing = false;
     }
   }.bind(this));
 }
@@ -44,8 +46,8 @@ Sound.prototype.add = function() {
 }
 
 Sound.prototype.play = function() {
-  if (this._paused) {
-    this._paused = false;
+  if (!this._playing) {
+    this._playing = true;
     this.howl.play(this.next());
   }
 

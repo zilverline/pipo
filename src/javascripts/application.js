@@ -46,16 +46,16 @@ var App = {
     this.sound.play();
   },
 
-  playGamepointSound: function(game) {
-
+  playGamepointSound: function() {
+    this.sound.add("game-point").play();
   },
 
-  playWinnerSound: function(game) {
-
+  playWinnerSound: function() {
+    this.sound.add("game-over").play();
   },
 
-  playServiceSound: function(game) {
-
+  playServiceSound: function() {
+    this.sound.add("switch-service").play();
   },
 
   startGame: function() {
