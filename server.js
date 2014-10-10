@@ -20,24 +20,13 @@ var server = require("http").createServer(function (req, res) {
   console.log("Started pipo on port 3000");
 });
 
-var io = require("socket.io").listen(server);
-var view = {
-  emit: function(data) {
-    io.emit("game", data);
-  },
-
-  onScore: function(player, newState) {
-    io.emit('score', newState);
-    this.emit(newState);
-  },
-
-  onTransition: function(newStatus, newState) {
-    io.emit(newStatus, newState);
-    this.emit(newState);
-  }
-};
+var View = require("./lib/view");
+var Game = require("./lib/game");
 var ScoreButton = require("./lib/score_button");
-var game = require("./lib/game")(view);
+
+var io = require("socket.io").listen(server);
+var view = View(io);
+var game = Game(view);
 var buttons = {
   left: ScoreButton.create({ button: 17, led: 18 }),
   right: ScoreButton.create({ button: 22, led: 23 })
