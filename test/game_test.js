@@ -115,7 +115,7 @@ describe("Game", function() {
       expect(view.gameState.status).to.equal("idle");
     });
 
-    it ("starts a rematch on score", function() {
+    it ("starts a rematch on round", function() {
       game.started = "right";
       game.round();
       clock.tick(60100);
