@@ -136,8 +136,8 @@ describe("Game", function() {
     it ("sets the server when the first person scores, does not increase score", function() {
       game.status = "service";
       game.round("left");
-      expect(view.service).to.equal("left");
-      expect(view.gameState.status).to.equal("playing");
+      expect(view.gameState.service).to.equal("left");
+      expect(view.status).to.equal("playing");
 
       expect(view.gameState.players["left"].score).to.equal(0);
       expect(view.gameState.players["right"].score).to.equal(0);
@@ -147,9 +147,7 @@ describe("Game", function() {
       game.status = "playing";
       game.service = "left";
       game.players["left"].score = 4;
-      game.publish();
 
-      expect(view.service).to.equal("left");
       game.round("left");
       expect(view.service).to.equal("right");
     });
