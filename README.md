@@ -14,6 +14,9 @@ gem install sass-globbing compass
 npm install
 
 npm install -g grunt-cli
+
+# for building audiosprites
+brew install ffmpeg --with-theora --with-libogg --with-libvorbis
 ```
 
 ## Build & Run

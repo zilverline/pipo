@@ -3,6 +3,7 @@
 var React = require("react");
 var PlayerComponent = require("./player");
 var GameOverComponent = require("./game_over");
+var ControlsComponent = require("./controls");
 
 module.exports = React.createClass({
   render: function () {
@@ -13,11 +14,7 @@ module.exports = React.createClass({
         <PlayerComponent key={"left"} player={this.props.game.players["left"]} />
         <PlayerComponent key={"right"} player={this.props.game.players["right"]} />
 
-        <div className="controls">
-          <a href="#" onTouchTap={this.handleReset}>
-            <i className="fa fa-sign-out" />
-          </a>
-        </div>
+        <ControlsComponent />
 
         {this.renderGameOver()}
       </div>

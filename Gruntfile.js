@@ -72,6 +72,10 @@ module.exports = function(grunt) {
           {
             pattern: '@@@CSS@@@',
             replacement: 'application.css'
+          },
+          {
+            pattern: '@@@SOUNDS@@@',
+            replacement: 'sounds'
           }]
         }
       },
@@ -87,6 +91,10 @@ module.exports = function(grunt) {
           {
             pattern: '@@@CSS@@@',
             replacement: 'application-<%= now %>.min.css'
+          },
+          {
+            pattern: '@@@SOUNDS@@@',
+            replacement: 'sounds-<%= now %>'
           }]
         }
       }
@@ -118,7 +126,10 @@ module.exports = function(grunt) {
           dest: 'dist/fonts/'
         }, {
           'dist/application-<%= now %>.min.js': 'build/application.min.js',
-          'dist/application-<%= now %>.min.css': 'build/application.min.css'
+          'dist/application-<%= now %>.min.css': 'build/application.min.css',
+          'dist/sounds-<%= now %>.mp3': 'build/sounds.mp3',
+          'dist/sounds-<%= now %>.oga': 'build/sounds.oga',
+          'dist/sounds-<%= now %>.m4a': 'build/sounds.m4a'
         }]
       }
     },
@@ -139,6 +150,15 @@ module.exports = function(grunt) {
           noColors: true
         }
       }
+    },
+    audiosprite : {
+      all : {
+        cwd: "build/",
+        output: "sounds",
+        files: "../src/sounds/*.mp3",
+        export: "m4a,ogg,mp3",
+        log: "warning"
+      }
     }
   });
 
@@ -152,8 +172,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
+  grunt.loadNpmTasks('grunt-audiosprite');
 
   grunt.registerTask('test', 'mochaTest');
-  grunt.registerTask('default', ['sass', 'browserify:dev', 'string-replace:dev', 'copy:dev']);
+  grunt.registerTask('default', ['sass', 'audiosprite', 'browserify:dev', 'string-replace:dev', 'copy:dev']);
   grunt.registerTask('prod', ['default', 'test', 'clean:dist', 'string-replace:dist', 'cssmin', 'uglify', 'copy:dist']);
 };

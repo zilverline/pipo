@@ -1,10 +1,20 @@
 var nodeStatic = require("node-static");
-var folder = new nodeStatic.Server(process.env.NODE_ENV == "production" ? "./dist" : "./build");
+var folder, cache;
+if (process.env.NODE_ENV == "production") {
+  folder = "./dist";
+  cache = 3600 * 24 * 365; // one year
+} else {
+  folder = "./build";
+  cache = false; // disable cache
+}
+
+var folderServer = new nodeStatic.Server(folder, { cache: cache });
+
 var server = require("http").createServer(function (req, res) {
   console.log(req.method + ": " + req.url);
 
   req.addListener('end', function () {
-    folder.serve(req, res);
+    folderServer.serve(req, res);
   }).resume();
 }).listen(3000, function() {
   console.log("Started pipo on port 3000");
