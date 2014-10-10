@@ -25,12 +25,12 @@ var Game = require("./lib/game");
 var ScoreButton = require("./lib/score_button");
 
 var io = require("socket.io").listen(server);
-var view = View(io);
-var game = Game(view);
 var buttons = {
   left: ScoreButton.create({ button: 17, led: 18 }),
   right: ScoreButton.create({ button: 22, led: 23 })
 }
+var view = View(io, buttons);
+var game = Game(view);
 
 var onscore = function(side) {
   return function(err) {

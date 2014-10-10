@@ -13,9 +13,31 @@ describe("View", function() {
     },
     events: []
   };
-  var view = View(socket);
+  var Led = {
+    blink: function(times, speed) {
+      var event = {};
+      event[speed] = times;
+      this.blinks.push(event);
+    },
+    restore: function() {
+      this.blinks = [];
+    },
+    blinks: []
+  };
+  var leds = {
+    'left': Object.create(Led),
+    'right': Object.create(Led),
+    restore: function() {
+      this['left'].restore();
+      this['right'].restore();
+    }
+  };
+  var view = View(socket, leds);
 
-  afterEach(socket.restore.bind(socket));
+  afterEach(function() {
+    socket.restore();
+    leds.restore();
+  });
 
   describe("emit", function() {
     it ("emits game state", function() {
@@ -36,6 +58,12 @@ describe("View", function() {
       var gameState = "right scored";
       view.onScore("right", gameState);
       expect(socket.events).to.contain({"game": gameState});
+    });
+
+    it ("blinks led", function() {
+      view.onScore("left", "left scored");
+      expect(leds['left'].blinks).to.contain({'fast': 3});
+      expect(leds['right'].blinks).to.be.empty;
     });
   });
 
