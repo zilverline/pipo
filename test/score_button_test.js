@@ -40,7 +40,7 @@ describe("ScoreButton", function() {
   score_button.bind(function() { onscore_called = true }, hw_button, hw_led);
 
   beforeEach(function() {
-    hw_led.reset()
+    hw_led.reset();
     onscore_called = false;
   });
 
@@ -49,7 +49,7 @@ describe("ScoreButton", function() {
   });
 
   it ("can blink", function(done) {
-    score_button.blink(1, 'times')
+    score_button.blink(1, 'times');
     setTimeout(function() {
       expect(hw_led.values()).to.eql([1,0]);
       done();
@@ -57,7 +57,7 @@ describe("ScoreButton", function() {
   });
 
   it ("can blink twice", function(done) {
-    score_button.blink(2, 'times')
+    score_button.blink(2, 'times');
     setTimeout(function() {
       expect(hw_led.values()).to.eql([1,0,1,0]);
       done();
