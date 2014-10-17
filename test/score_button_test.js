@@ -18,7 +18,7 @@ describe("ScoreButton", function() {
     write: function(value, callback) {
              this._values.push(value);
              this._value = value;
-             callback();
+             if(callback) { callback(); }
            },
     value: function() {
              return this._value;
@@ -67,6 +67,30 @@ describe("ScoreButton", function() {
   it ("calls onscore function if button pressed", function() {
     hw_button.pressButton();
     expect(onscore_called).to.be.true;
+  });
+
+  it ("cancels the current blink if another blink is requested", function(done) {
+    score_button.blinkPeriod = 10;
+    score_button.blink(20, 'times');
+
+    setTimeout(function() {
+      score_button.blink(2, 'times');
+    }, 5);
+
+    setTimeout(function() {
+      expect(hw_led.values()).to.eql([1,0,1,0,1,0]);
+      done();
+    }, 50);
+  });
+
+  it ("blinks for x seconds", function(done) {
+    score_button.blinkPeriod = 150;
+    score_button.blink(0.5, 'seconds');
+
+    setTimeout(function() {
+      expect(hw_led.values()).to.eql([1,0,1,0,1,0])
+      done();
+    }, 800);
   });
 
 });
