@@ -35,7 +35,7 @@ describe("ScoreButton", function() {
   };
 
   var score_button = ScoreButton.create({});
-  score_button.blinkFrequency = 1;
+  score_button.blinkPeriod = 1;
   var onscore_called = false;
   score_button.bind(function() { onscore_called = true }, hw_button, hw_led);
 
