@@ -48,7 +48,7 @@ module.exports = function(grunt) {
         tasks: ['default']
       },
       test: {
-        files: ['src/**/*.js', 'test/**/*.js'],
+        files: ['src/**/*.js', 'lib/**/*.js', 'test/**/*.js'],
         tasks: ['test']
       }
     },
