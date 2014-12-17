@@ -6,7 +6,7 @@ Make sure you have node, npm and ruby installed.
 
  * NPM 2.0.2
  * Node v0.10.32
- * Ruby 2.1.2
+ * Ruby 2.1.5
 
 Install all dependencies:
 ```
