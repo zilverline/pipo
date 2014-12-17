@@ -18,7 +18,7 @@ describe("ScoreButton", function() {
     write: function(value, callback) {
              this._values.push(value);
              this._value = value;
-             callback();
+             if(callback) { callback(); }
            },
     value: function() {
              return this._value;
@@ -35,12 +35,12 @@ describe("ScoreButton", function() {
   };
 
   var score_button = ScoreButton.create({});
-  score_button.blinkFrequency = 1;
+  score_button.blinkPeriod = 1;
   var onscore_called = false;
   score_button.bind(function() { onscore_called = true }, hw_button, hw_led);
 
   beforeEach(function() {
-    hw_led.reset()
+    hw_led.reset();
     onscore_called = false;
   });
 
@@ -49,7 +49,7 @@ describe("ScoreButton", function() {
   });
 
   it ("can blink", function(done) {
-    score_button.blink(1, 'times')
+    score_button.blink(1, 'times');
     setTimeout(function() {
       expect(hw_led.values()).to.eql([1,0]);
       done();
@@ -57,7 +57,7 @@ describe("ScoreButton", function() {
   });
 
   it ("can blink twice", function(done) {
-    score_button.blink(2, 'times')
+    score_button.blink(2, 'times');
     setTimeout(function() {
       expect(hw_led.values()).to.eql([1,0,1,0]);
       done();
@@ -67,6 +67,30 @@ describe("ScoreButton", function() {
   it ("calls onscore function if button pressed", function() {
     hw_button.pressButton();
     expect(onscore_called).to.be.true;
+  });
+
+  it ("cancels the current blink if another blink is requested", function(done) {
+    score_button.blinkPeriod = 10;
+    score_button.blink(20, 'times');
+
+    setTimeout(function() {
+      score_button.blink(2, 'times');
+    }, 5);
+
+    setTimeout(function() {
+      expect(hw_led.values()).to.eql([1,0,1,0,1,0]);
+      done();
+    }, 50);
+  });
+
+  it ("blinks for x seconds", function(done) {
+    score_button.blinkPeriod = 150;
+    score_button.blink(0.5, 'seconds');
+
+    setTimeout(function() {
+      expect(hw_led.values()).to.eql([1,0,1,0,1,0])
+      done();
+    }, 800);
   });
 
 });
